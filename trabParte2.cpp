@@ -726,27 +726,27 @@ T* aumentarVetor(T* lista, int tam, int pos) {
 
 //EU QUERIA FAZER UMA FUNÇÃO PRA VERIFICAR E ATUALIZAR AO MESMO TEMPO MAS NÃO ROLOU
 
-//template<typename T>
-//void verificador_espaco_ocupado(T* lista, int cont, int &mais, int TAM) {
-//	if (cont == TAM - 1 + (mais - 1) * 5) { //verfica se o vetor esta completamente ocupado, se estiver, acrescenta 5 posições novas
-//		lista = aumentarVetor(lista, TAM + (mais - 1) * 5, 5 * mais); 
-//		mais++; //indicador de quantas vezes o vetor foi aumentado
-//	}
-//}
-
-void deletar(Livro* lista_livros, Revista* lista_revistas, Usuario* lista_usuarios, Editora* lista_editoras, Autor* lista_autores,
-	string* lista_assuntos, string* lista_titulos, string* titulos_revistas, string* lista_nomes) { // Liberando a memória alocada para os vetores
-
-	delete[]lista_autores;
-	delete[]lista_editoras;
-	delete[]lista_assuntos;
-	delete[]lista_titulos;
-	delete[]titulos_revistas;
-	delete[]lista_nomes;
-	delete[]lista_livros;
-	delete[]lista_revistas;
-	delete[]lista_usuarios;
+template<typename T>
+void verificador_espaco_ocupado(T* lista, int cont, int &mais, int TAM) {
+	if (cont == TAM - 1 + mais * 5) { //verfica se o vetor esta completamente ocupado, se estiver acrescenta 5 posições novas
+		lista = aumentarVetor(lista, TAM + mais * 5, 5); 
+		mais++; //indicador de quantas vezes o vetor foi aumentado
+	}
 }
+
+//void deletar(Livro* lista_livros, Revista* lista_revistas, Usuario* lista_usuarios, Editora* lista_editoras, Autor* lista_autores,
+//	string* lista_assuntos, string* lista_titulos, string* titulos_revistas, string* lista_nomes) { // Liberando a memória alocada para os vetores
+//
+//	delete[]lista_autores;
+//	delete[]lista_editoras;
+//	delete[]lista_assuntos;
+//	delete[]lista_titulos;
+//	delete[]titulos_revistas;
+//	delete[]lista_nomes;
+//	delete[]lista_livros;
+//	delete[]lista_revistas;
+//	delete[]lista_usuarios;
+//}
 
 #pragma endregion Alocacao de Memoria
 
@@ -860,7 +860,7 @@ int main()
 	//outras variaveis
 	int escolha;
 	int cont_livros = 4, cont_revistas = 3, cont_autor = 4, cont_editora = 8, cont_assunto = 8, cont_usuario = 2, soma = 0;
-	int mais_livros = 1, mais_rev = 1, mais_usuarios = 1, mais_ed = 1, mais_autor = 1, mais_assunto = 1;
+	int mais_livros = 0, mais_rev = 0, mais_usuarios = 0, mais_ed = 0, mais_autor = 0, mais_assunto = 0;
 	char resposta;
 	bool flag = false, flag_aux = false;
 	Livro livro;
@@ -950,10 +950,12 @@ int main()
 						set_color(7);
 
 						cont_livros++;
-						//if (cont_livros == TAM - 1 + (mais_livros - 1) * 5) { //verfica se o vetor esta completamente ocupado, se estiver, acrescenta 5 posições novas
-						//	lista_livros = aumentarVetor(lista_livros, TAM + (mais_livros - 1) * 5, 5 * mais_livros);
-						//	mais_livros++; //indicador de quantas vezes o vetor foi aumentado
-						//}
+						if (cont_livros == TAM - 1 + mais_livros * 5) { //verfica se o vetor esta completamente ocupado, se estiver, acrescenta 5 posições novas
+							lista_livros = aumentarVetor(lista_livros, TAM + mais_livros * 5, 5);
+							mais_livros++; //indicador de quantas vezes o vetor foi aumentado
+						}
+
+						//verificador_espaco_ocupado(lista_livros, cont_livros, mais_livros, TAM);
 
 						lista_livros[cont_livros] = cadastrar_livro(lista_autores, cont_autor, lista_editoras, cont_editora, id_livro, data_atual);
 						id_livro++;
@@ -962,10 +964,15 @@ int main()
 						for (int i = 0; i < cont_assunto + 1; i++) {
 							if (lista_assuntos[i] == lista_livros[cont_livros].assunto) { //verifica se o assunto ja esta cadastrado
 								flag = true;
+								break;
 							}
 						}
 						if (flag == false) { //se não estiver cadastrado, eh adicionado a lista
 							cont_assunto++;
+							if (cont_assunto == TAM - 1 + mais_assunto * 5) { //verfica se o vetor esta completamente ocupado, se estiver, acrescenta 5 posições novas
+								lista_assuntos = aumentarVetor(lista_assuntos, TAM + mais_assunto * 5, 5);
+								mais_assunto++; //indicador de quantas vezes o vetor foi aumentado
+							}
 							lista_assuntos[cont_assunto] = lista_livros[cont_livros].assunto;
 						}
 						set_color(2);
@@ -986,7 +993,7 @@ int main()
 						set_color(7);
 						cont_revistas++;
 						if (cont_revistas == TAM - 1 + mais_rev * 5) { //verfica se o vetor esta completamente ocupado, se estiver, acrescenta 5 posições novas
-							lista_revistas = aumentarVetor(lista_revistas, TAM + (mais_rev - 1) * 5, 5 * mais_rev);
+							lista_revistas = aumentarVetor(lista_revistas, TAM + mais_rev * 5, 5);
 							mais_rev++; //indicador de quantas vezes o vetor foi aumentado
 						}
 
@@ -1001,6 +1008,10 @@ int main()
 						}
 						if (flag == false) { //se não estiver cadastrado, eh adicionado a lista
 							cont_assunto++;
+							if (cont_assunto == TAM - 1 + mais_assunto * 5) { //verfica se o vetor esta completamente ocupado, se estiver, acrescenta 5 posições novas
+								lista_assuntos = aumentarVetor(lista_assuntos, TAM + mais_assunto * 5, 5);
+								mais_assunto++; //indicador de quantas vezes o vetor foi aumentado
+							}
 							lista_assuntos[cont_assunto] = lista_revistas[cont_revistas].assunto;
 						}
 						set_color(2);
@@ -1028,8 +1039,8 @@ int main()
 						}
 
 						cont_autor++;
-						if (cont_autor == TAM - 1 + (mais_autor - 1) * 5) { //verfica se o vetor esta completamente ocupado, se estiver, acrescenta 5 posições novas
-							lista_autores = aumentarVetor(lista_autores, TAM + (mais_autor - 1) * 5, 5 * mais_autor); 
+						if (cont_autor == TAM - 1 + mais_autor * 5) { //verfica se o vetor esta completamente ocupado, se estiver, acrescenta 5 posições novas
+							lista_autores = aumentarVetor(lista_autores, TAM + mais_autor * 5, 5);
 							mais_autor++; //indicador de quantas vezes o vetor foi aumentado
 						}
 
@@ -1047,6 +1058,8 @@ int main()
 							cout << "\n\tAutor cadastrado com sucesso!" << endl;
 							set_color(7);
 						}
+						else { cont_autor--; }
+
 						cout << "\nDeseja realizar outro cadastro (s/n)? ";
 						cin >> resposta;
 					} while (resposta == 's' || resposta == 'S');
@@ -1067,8 +1080,8 @@ int main()
 						}
 
 						cont_editora++;
-						if (cont_editora == TAM - 1 + (mais_ed - 1) * 5) { //verfica se o vetor esta completamente ocupado, se estiver, acrescenta 5 posições novas
-							lista_editoras = aumentarVetor(lista_editoras, TAM + (mais_ed - 1) * 5, 5 * mais_ed);
+						if (cont_editora == TAM - 1 + mais_ed * 5) { //verfica se o vetor esta completamente ocupado, se estiver, acrescenta 5 posições novas
+							lista_editoras = aumentarVetor(lista_editoras, TAM + mais_ed * 5, 5);
 							mais_ed++; //indicador de quantas vezes o vetor foi aumentado
 						}
 
@@ -1087,6 +1100,8 @@ int main()
 							cout << "\n\tEditora cadastrado com sucesso!" << endl;
 							set_color(7);
 						}
+						else { cont_editora--; }
+
 						cout << "\nDeseja realizar outro cadastro (s/n)? ";
 						cin >> resposta;
 
@@ -1440,7 +1455,7 @@ int main()
 							set_color(6);
 							cout << "\n - - - - - LISTAGEM DE LIVROS - - - - -" << endl;
 							set_color(7);
-							for (int i = 0; i < cont_livros; i++) {
+							for (int i = 0; i < cont_livros + 1; i++) {
 								mostrar_livro(lista_livros[i]);
 							}
 							system("pause");
@@ -1938,6 +1953,16 @@ int main()
 			break;
 		}
 	}
-	deletar(lista_livros, lista_revistas, lista_usuarios, lista_editoras, lista_autores, lista_assuntos, lista_titulos, titulos_revistas, lista_nomes); //função que deleta todos os vetores
+	//deletar(lista_livros, lista_revistas, lista_usuarios, lista_editoras, lista_autores, lista_assuntos, lista_titulos, titulos_revistas, lista_nomes); //função que deleta todos os vetores
+	delete[]lista_autores;
+	delete[]lista_editoras;
+	delete[]lista_assuntos;
+	delete[]lista_titulos;
+	delete[]titulos_revistas;
+	delete[]lista_nomes;
+	delete[]lista_livros;
+	delete[]lista_revistas;
+	delete[]lista_usuarios;
+	
 	return 0;
 }
