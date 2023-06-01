@@ -715,13 +715,12 @@ void gerar_usuarios(Usuario& u, int id, string nome) {
 #pragma region Alocacao de Memoria
 
 template<typename T>
-T* aumentarVetor(T* lista, int &tam, int pos) {
+T* aumentarVetor(T* lista, int tam, int pos) {
 	T* aux = new T[tam + pos];
 	for (int i = 0; i < tam; i++) {
 		aux[i] = lista[i];
 	}
 	delete[]lista;
-	tam += pos;
 	return aux;
 }
 
@@ -729,6 +728,7 @@ template<typename Q>
 Q* verificador_espaco_ocupado(Q* lista, int cont, int &TAM) {
 	if (cont == TAM) { //verfica se o vetor esta completamente ocupado, se estiver acrescenta 5 posições novas
 		lista = aumentarVetor(lista, TAM, 5);
+		TAM += 5;
 		return lista;
 	}
 	return lista;
